@@ -1,0 +1,19 @@
+非静态数据成员初始化 int index = 0; 
+C++11允许在定义的时候对非static非const成员初始化。
+
+拓展初始化列表 vector<A> avec{a1,a2,a3};
+以前只有数组可以使用初始化列表，现在其他容器可以用{}实现。
+
+lambda表达式 [](const A&a1, const A&a2){return a1.index<a2.index;}
+创建匿名的函数对象，简化工作
+[]代表函数可以获得的全局变量,（）形参，->返回类型（此处没有定义）,{}函数体
+
+自动类型 auto auto & a:avec
+auto 从初始化表达式中推断数据类型，比如auto i = 1.0;
+编译时进行推导，不影响运行效率。
+也不影响编译速度，因为本来也要判断右侧类型跟左侧是否匹配。
+
+range-base for loop for (auto & a:avec)
+有iterator的序列可以用这种简化的for循环
+
+

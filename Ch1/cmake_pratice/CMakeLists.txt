@@ -1,0 +1,3 @@
+cmake_minimum_required(VERSION 2.7)
+PROJECT(HOMEWORK)
+ADD_SUBDIRECTORY(src)
