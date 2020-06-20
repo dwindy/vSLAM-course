@@ -275,8 +275,10 @@ void ComputeORB(const cv::Mat &img, vector<cv::KeyPoint> &keypoints, vector<Desc
     const int half_path_size = 8;
     const int half_boundary = 16;
     int bad_points = 0;
+    int counter = 0;
     for (auto &kp : keypoints)
     {
+        counter=counter+1;
         //remove the points from out-skirt?
         if (kp.pt.x < half_boundary || kp.pt.y < half_boundary || kp.pt.x >= img.cols - half_boundary || kp.pt.y >= img.rows - half_boundary)
         {
@@ -301,6 +303,12 @@ void ComputeORB(const cv::Mat &img, vector<cv::KeyPoint> &keypoints, vector<Desc
         float m_sqrt = sqrt(m01 * m01 + m10 * m10)+ 1e-18;;
         float sin_theta = m01 / m_sqrt;
         float cos_theta = m10 / m_sqrt;
+//        if(true)
+//        {
+//            cout<<"counter "<<counter<<endl;
+//            cout<<"sin"<<sin_theta<<endl;
+//            cout<<"cos"<<cos_theta<<endl;
+//        }
 
         DescType desc(8, 0);
         for (int i = 0; i < 8; i++)
