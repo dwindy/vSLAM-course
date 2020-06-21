@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="orb_cv" targetName="triangulation" />
+      <config projectName="orb_cv" targetName="epipolar" />
+      <config projectName="orb_cv" targetName="Rt_3d_2d" />
+      <config projectName="orb_cv" targetName="orb_cv" />
+      <config projectName="orb_cv" targetName="orb_cv_mannu" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bf50b697-cd0f-41ba-86ea-b562e137464b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../Ch3/homework/L3/.idea/L3.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/jrajectory_aligment.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/.name" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/E2Rt.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/E2Rt.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/GN-BA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/GN-BA.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/computeORB.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../SLAM第五讲作业资料/L5/code/computeORB.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/orb_cv.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/orb_cv.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/orb_mannu.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/orb_mannu.cpp" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="1dap2qVVxMFJ2fJt6atpNElM4q4" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../slambook2/ch7/CMakeLists.txt" />
+  </component>
+  <component name="RunManager" selected="CMake Application.Rt_3d_2d">
+    <configuration name="Rt_3d_2d" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="orb_cv" TARGET_NAME="Rt_3d_2d" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="orb_cv" RUN_TARGET_NAME="Rt_3d_2d">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="epipolar" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="orb_cv" TARGET_NAME="epipolar" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="orb_cv" RUN_TARGET_NAME="epipolar">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="orb_cv" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="orb_cv" TARGET_NAME="orb_cv" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="orb_cv" RUN_TARGET_NAME="orb_cv">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="orb_cv_mannu" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="orb_cv" TARGET_NAME="orb_cv_mannu" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="orb_cv" RUN_TARGET_NAME="orb_cv_mannu">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="triangulation" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="orb_cv" TARGET_NAME="triangulation" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="orb_cv" RUN_TARGET_NAME="triangulation">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.epipolar" />
+      <item itemvalue="CMake Application.orb_cv" />
+      <item itemvalue="CMake Application.orb_cv_mannu" />
+      <item itemvalue="CMake Application.Rt_3d_2d" />
+      <item itemvalue="CMake Application.triangulation" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bf50b697-cd0f-41ba-86ea-b562e137464b" name="Default Changelist" comment="" />
+      <created>1592672853667</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1592672853667</updated>
+      <workItem from="1592672855067" duration="63000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="780" y="297" key="FileChooserDialogImpl" timestamp="1592672913101">
+      <screen x="65" y="24" width="1855" height="1056" />
+    </state>
+    <state x="780" y="297" key="FileChooserDialogImpl/0.1080.1920.1080/65.24.1855.1056@65.24.1855.1056" timestamp="1592672913101" />
+  </component>
+</project>
