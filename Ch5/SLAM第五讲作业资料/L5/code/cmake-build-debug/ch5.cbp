@@ -5,7 +5,7 @@
 		<Option title="ch5"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\..\..\..\..\usr\local\share\OpenCV\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\Pangolin\;CMake Files\..\..\..\..\..\slambook\;CMake Files\..\..\..\..\..\slambook\3rdparty\;CMake Files\..\..\..\..\..\slambook\3rdparty\Sophus\;CMake Files\..\..\..\..\..\slambook\3rdparty\Sophus\build\;"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\opencv4\;CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\Pangolin\;CMake Files\..\..\..\..\..\slambook\;CMake Files\..\..\..\..\..\slambook\3rdparty\;CMake Files\..\..\..\..\..\slambook\3rdparty\Sophus\;CMake Files\..\..\..\..\..\slambook\3rdparty\Sophus\build\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/cmake-build-debug"/>
@@ -46,7 +46,7 @@
 				<Compiler>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -72,7 +72,7 @@
 				<Compiler>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
 					<Add directory="/usr/include/c++/5/backward"/>
@@ -96,7 +96,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
@@ -122,7 +122,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
@@ -148,7 +148,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
@@ -174,7 +174,7 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
@@ -201,7 +201,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
@@ -227,7 +227,7 @@
 				<Option compiler="gcc"/>
 				<Compiler>
 					<Add directory="/home/xin/VSLAM-course/slambook/3rdparty/Sophus"/>
-					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/usr/local/include/opencv4"/>
 					<Add directory="/usr/include/eigen3"/>
 					<Add directory="/usr/include/c++/5"/>
 					<Add directory="/usr/include/x86_64-linux-gnu/c++/5"/>
@@ -261,17 +261,17 @@
 		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
-		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/lib/cmake/opencv4/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
-		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
-			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\share\OpenCV\"/>
+		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/lib/cmake/opencv4/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\opencv4\"/>
 		</Unit>
 		<Unit filename="/home/xin/VSLAM-course/vSLAM-course/Ch5/SLAM第五讲作业资料/L5/code/../../../../../../../../usr/local/lib/cmake/Pangolin/PangolinConfig.cmake">
 			<Option virtualFolder="CMake Files\..\..\..\..\..\..\..\..\usr\local\lib\cmake\Pangolin\"/>
