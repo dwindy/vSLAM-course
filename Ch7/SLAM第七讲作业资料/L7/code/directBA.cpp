@@ -18,7 +18,7 @@ using namespace std;
 
 #include <Eigen/Core>
 #include <sophus/se3.h>
-#include <opencv2/opencv.hpp>
+#include <opencv4/opencv2/opencv.hpp>
 
 #include <pangolin/pangolin.h>
 #include <boost/format.hpp>
@@ -74,8 +74,10 @@ public:
 
 // TODO edge of projection error, implement it
 // 16x1 error, which is the errors in patch
-typedef Eigen::Matrix<double,16,1> Vector16d;
-class EdgeDirectProjection : public g2o::BaseBinaryEdge<16, Vector16d, g2o::VertexSBAPointXYZ, VertexSophus> {
+typedef Eigen::Matrix<double, 16, 1> Vector16d;
+
+//main中定义为<6,3>,所以这里两个定点的顺序我交换了一下，pose在前.
+class EdgeDirectProjection : public g2o::BaseBinaryEdge<16, Vector16d, VertexSophus, g2o::VertexSBAPointXYZ> {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
@@ -89,6 +91,31 @@ public:
     virtual void computeError() override {
         // TODO START YOUR CODE HERE
         // compute projection error ...
+        float shifterTable[2][16] = {{-2, -2, -2, -2, -1, -1, -1, -1, 0,  0,  0, 0, 1,  1,  1, 1},
+                                     {-2, -1, 0,  1,  -2, -1, 0,  1,  -2, -1, 0, 1, -2, -1, 0, 1,}};
+        for (int i = 0; i < 16; i++) {
+            //拿到指向两个顶点的指针
+            g2o::VertexSBAPointXYZ *vertex_point = (g2o::VertexSBAPointXYZ *) _vertices[1];
+            VertexSophus *vertex_camera = (VertexSophus *) _vertices[0];
+            //估计位姿transform到相机系
+            Eigen::Vector3d p_undis = vertex_camera->estimate() * vertex_point->estimate();
+            //投影到图像上
+            p_undis = -p_undis / p_undis[2];
+            float u = fx * p_undis[0] + cx;
+            float v = fy * p_undis[1] + cy;
+            //找到patch中对应的位置
+            u = u + shifterTable[0][i];
+            v = v + shifterTable[1][i];
+            //越界点跳过
+            if (u < 0 || u > this->targetImg.cols || v < 0 || v > this->targetImg.rows) {
+                _error[i] = 0;
+                continue;
+            }
+            //投影像素值和固定像素值相减
+            float estimate_Pixel = GetPixelValue(this->targetImg, u, v);
+            //用_measurement还是用this->origColor?
+            _error[i] = this->origColor[i] - estimate_Pixel;
+        }
         // END YOUR CODE HERE
     }
 
@@ -163,7 +190,45 @@ int main(int argc, char **argv) {
 
     // TODO add vertices, edges into the graph optimizer
     // START YOUR CODE HERE
-
+    vector<VertexSophus *> vertex_cameras;
+    vector<g2o::VertexSBAPointXYZ *> vertex_points;
+    //往optimizer里面增加顶点
+    for(int i=0;i<poses.size();i++)
+    {
+        VertexSophus *vc = new VertexSophus();
+        vc->setId(i);
+        //设置初始值
+        vc->setEstimate(poses[i]);
+        optimizer.addVertex(vc);
+        vertex_cameras.push_back(vc);
+    }
+    for(int i=0;i<points.size();i++)
+    {
+        g2o::VertexSBAPointXYZ *vp = new g2o::VertexSBAPointXYZ();
+        vp->setId(i+poses.size());
+        vp->setEstimate(points[i]);
+        //vp->setMarginalized(true);
+        optimizer.addVertex(vp);
+        vertex_points.push_back(vp);
+    }
+    //往opitimizer里面增加边
+    for (int i = 0; i < points.size(); i++) {
+        for (int c = 0; c < vertex_cameras.size(); c++) {
+            EdgeDirectProjection *edge = new EdgeDirectProjection(color[i],images[c]);
+            edge->setVertex(0, vertex_cameras[c]);
+            edge->setVertex(1, vertex_points[i]);
+            Vector16d measurement;
+            for(int g = 0;g<16;g++)
+            {
+                measurement[g] = color[i][g];
+            }
+            edge->setMeasurement(measurement);
+            edge->setInformation(Eigen::Matrix<double,16,16>::Identity());
+            //防outlier
+            edge->setRobustKernel(new g2o::RobustKernelHuber());
+            optimizer.addEdge(edge);
+        }
+    }
     // END YOUR CODE HERE
 
     // perform optimization
@@ -172,6 +237,15 @@ int main(int argc, char **argv) {
 
     // TODO fetch data from the optimizer
     // START YOUR CODE HERE
+    for (int i = 0; i < vertex_cameras.size(); i++) {
+        VertexSophus *vertexC = vertex_cameras[i];
+        auto estimate = vertexC->estimate();
+        poses[i] = estimate;
+    }
+    for (int i = 0; i < vertex_points.size(); ++i) {
+        auto vertex = vertex_points[i];
+        points[i] = vertex->estimate();
+    }
     // END YOUR CODE HERE
 
     // plot the optimized points and poses
@@ -244,7 +318,7 @@ void Draw(const VecSE3 &poses, const VecVec3d &points) {
         glPointSize(2);
         glBegin(GL_POINTS);
         for (size_t i = 0; i < points.size(); i++) {
-            glColor3f(0.0, points[i][2]/4, 1.0-points[i][2]/4);
+            glColor3f(0.0, points[i][2] / 4, 1.0 - points[i][2] / 4);
             glVertex3d(points[i][0], points[i][1], points[i][2]);
         }
         glEnd();

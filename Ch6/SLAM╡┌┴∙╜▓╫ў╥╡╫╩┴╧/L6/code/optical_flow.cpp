@@ -86,7 +86,7 @@ int main(int argc, char **argv) {
     // first use single level LK in the validation picture
     vector<KeyPoint> kp2_single;
     vector<bool> success_single;
-    OpticalFlowSingleLevel(img1, img2, kp1, kp2_single, success_single, false);
+    OpticalFlowSingleLevel(img1, img2, kp1, kp2_single, success_single, true);
 
     // then test multi-level LK
     vector<KeyPoint> kp2_multi;
@@ -161,10 +161,18 @@ void OpticalFlowSingleLevel(
         double cost = 0, lastCost = 0;
         bool succ = true; // indicate if this point succeeded
 
+        Eigen::Matrix2d H= Eigen::Matrix2d::Zero();;
+        Eigen::Vector2d b= Eigen::Vector2d::Zero();;
+        Eigen::Vector2d J;
         // Gauss-Newton iterations
         for (int iter = 0; iter < iterations; iter++) {
-            Eigen::Matrix2d H = Eigen::Matrix2d::Zero();
-            Eigen::Vector2d b = Eigen::Vector2d::Zero();
+            if (inverse == false) {
+                H = Eigen::Matrix2d::Zero();
+                b = Eigen::Vector2d::Zero();
+            } else {
+                b = Eigen::Vector2d::Zero();
+            }
+
             cost = 0;
 
             if (kp.pt.x + dx <= half_patch_size || kp.pt.x + dx >= img1.cols - half_patch_size ||
@@ -181,28 +189,29 @@ void OpticalFlowSingleLevel(
                     double error = 0;
                     error = GetPixelValue(img1, kp.pt.x + x, kp.pt.y + y) -
                             GetPixelValue(img2, kp.pt.x + x + dx, kp.pt.y + y + dy);
-                    Eigen::Vector2d J;  // Jacobian
+                    //Eigen::Vector2d J;  // Jacobian
                     if (inverse == false) {
                         // Forward Jacobian
                         J = -1.0 * Eigen::Vector2d(0.5 * (GetPixelValue(img2, kp.pt.x + dx + x + 1, kp.pt.y + dy + y) -
                                                           GetPixelValue(img2, kp.pt.x + dx + x - 1, kp.pt.y + dy + y)),
                                                    0.5 * (GetPixelValue(img2, kp.pt.x + dx + x, kp.pt.y + dy + y + 1) -
-                                                          GetPixelValue(img2, kp.pt.x + dx + x, kp.pt.y + dy + y - 1)));
+                                                          GetPixelValue(img2, kp.pt.x + dx + x, kp.pt.y + dy + y - 1))
+                        );
                     } else {
                         // Inverse Jacobian
                         // NOTE this J does not change when dx, dy is updated, so we can store it and only compute error
                         J = -1.0 * Eigen::Vector2d(0.5 * (GetPixelValue(img1, kp.pt.x + dx + x + 1, kp.pt.y + dy + y) -
                                                           GetPixelValue(img1, kp.pt.x + dx + x - 1, kp.pt.y + dy + y)),
                                                    0.5 * (GetPixelValue(img1, kp.pt.x + dx + x, kp.pt.y + dy + y + 1) -
-                                                          GetPixelValue(img1, kp.pt.x + dx + x, kp.pt.y + dy + y - 1)));
+                                                          GetPixelValue(img1, kp.pt.x + dx + x, kp.pt.y + dy + y - 1))
+                        );
                     }
-
+                    b += (-error) * J;
+                    cost += error * error;
                     // compute H, b and set cost;
                     if (inverse == false || 0 == iter) {
                         H += J * J.transpose();
                     }
-                    b += -error * J;
-                    cost += error * error;
                     // TODO END YOUR CODE HERE
                 }
 
@@ -219,7 +228,7 @@ void OpticalFlowSingleLevel(
                 break;
             }
             if (iter > 0 && cost > lastCost) {
-                cout << "cost increased: " << cost << ", " << lastCost << endl;
+                cout << "cost increased: " << cost << ", " << lastguanji1Cost << endl;
                 break;
             }
 
