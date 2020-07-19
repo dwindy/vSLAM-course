@@ -6,22 +6,19 @@
 
 using namespace std;
 
-#include <g2o/core/sparse_optimizer.h>
 #include <g2o/core/base_unary_edge.h>
 #include <g2o/core/base_binary_edge.h>
 #include <g2o/core/base_vertex.h>
 #include <g2o/core/block_solver.h>
 #include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/solvers/dense/linear_solver_dense.h>
-#include <g2o/solvers/cholmod/linear_solver_cholmod.h>
 #include <g2o/core/robust_kernel.h>
 #include <g2o/core/robust_kernel_impl.h>
-#include <g2o/types/slam3d/se3quat.h>
 #include <g2o/types/sba/types_six_dof_expmap.h>
 
 #include <Eigen/Core>
 #include <sophus/se3.h>
-#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 #include <pangolin/pangolin.h>
 #include <boost/format.hpp>
@@ -78,7 +75,6 @@ public:
 // TODO edge of projection error, implement it
 // 16x1 error, which is the errors in patch
 typedef Eigen::Matrix<double,16,1> Vector16d;
-//注意，把相机位姿放在第一个顶点了
 class EdgeDirectProjection : public g2o::BaseBinaryEdge<16, Vector16d, VertexSophus, g2o::VertexSBAPointXYZ> {
 public:
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
@@ -93,35 +89,40 @@ public:
     virtual void computeError() override {
         // TODO START YOUR CODE HERE
         // compute projection error ...
-        float shifterTable[2][16] = {{-2, -2, -2, -2, -1, -1, -1, -1, 0,  0,  0, 0, 1,  1,  1, 1},
-                                     {-2, -1, 0,  1,  -2, -1, 0,  1,  -2, -1, 0, 1, -2, -1, 0, 1,}};
-        for (int i = 0; i < 16; i++) {
-            //拿到指向两个顶点的指针
-            g2o::VertexSBAPointXYZ *vertex_point = (g2o::VertexSBAPointXYZ *) _vertices[1];
-            VertexSophus *vertex_camera = (VertexSophus *) _vertices[0];
-            //估计位姿transform到相机系
-            Eigen::Vector3d p_undis = vertex_camera->estimate() * vertex_point->estimate();
-            //投影到图像上
-            p_undis = p_undis / p_undis[2];
-            float u = fx * p_undis[0] + cx;
-            float v = fy * p_undis[1] + cy;
-            //找到patch中对应的位置
-            u = u + shifterTable[0][i];
-            v = v + shifterTable[1][i];
-            //越界点跳过
-            if (u < 0 || u > this->targetImg.cols -1  || v < 0 || v > this->targetImg.rows -1 ) {
-                //_error[i] = 0;
+	VertexSophus *pose = static_cast<VertexSophus *> (_vertices[0]);
+	g2o::VertexSBAPointXYZ *point = static_cast<g2o::VertexSBAPointXYZ *> (_vertices[1]);
+
+	Sophus::SE3 T = pose->estimate();
+	Eigen::Vector3d P = point->estimate();
+	Eigen::Vector3d pos_camera = T * P;
+	pos_camera /= pos_camera[2];
+
+	Eigen::Vector2d pos_pixel;
+        pos_pixel[0] = fx * pos_camera[0] + cx;
+        pos_pixel[1] = fy * pos_camera[1] + cy;
+
+	        if (pos_pixel[0] < 3 || pos_pixel[0] > targetImg.cols - 3 ||
+            pos_pixel[1] < 3 || pos_pixel[1] > targetImg.rows - 3 ||
+            pos_camera[2] < 0){
+            for(int i = 0; i < 16; i++)
+            {
                 _error.data()[i] = 0.0;
                 this->setLevel(1);
-                continue;
             }
-            //投影像素值和固定像素值相减
-            float estimate_Pixel = GetPixelValue(this->targetImg, u, v);
-            //用_measurement还是用this->origColor?
-            //_error[i] = this->origColor[i] - estimate_Pixel;
-             _error.data()[i] = this->origColor[i] - estimate_Pixel;
+        } else {
+            int index = 0;
+            for(int v = -2; v < 2; v++)
+            {
+                for(int u = -2; u < 2; u++)
+                {
+                    _error.data()[index] = origColor[index] - GetPixelValue(targetImg,
+                                                                            pos_pixel[0] + v,
+                                                                            pos_pixel[1] + u);
+                    index++;
+                }
+            }
         }
-        // END YOUR CODE HERE
+// END YOUR CODE HERE
     }
 
     // Let g2o compute jacobian for you
@@ -186,10 +187,10 @@ int main(int argc, char **argv) {
 
     // build optimization problem
     typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 3>> DirectBlock;  // 求解的向量是6＊1的
-    //DirectBlock::LinearSolverType *linearSolver = new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>();
-    std::unique_ptr<DirectBlock::LinearSolverType> linearSolver (new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>()); // 线性方程求解器
+   // DirectBlock::LinearSolverType *linearSolver = new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>();
+    std::unique_ptr<DirectBlock::LinearSolverType> linearSolver (new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>());
     //DirectBlock *solver_ptr = new DirectBlock(linearSolver);
-    std::unique_ptr<DirectBlock> solver_ptr( new DirectBlock(std::move(linearSolver)));     // 矩阵块求解器
+    std::unique_ptr<DirectBlock> solver_ptr( new DirectBlock(std::move(linearSolver)));
     //g2o::OptimizationAlgorithmLevenberg *solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr); // L-M
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( std::move(solver_ptr) );
     g2o::SparseOptimizer optimizer;
@@ -198,67 +199,54 @@ int main(int argc, char **argv) {
 
     // TODO add vertices, edges into the graph optimizer
     // START YOUR CODE HERE
-    vector<VertexSophus *> vertex_cameras;
-    vector<g2o::VertexSBAPointXYZ *> vertex_points;
-    //往optimizer里面增加顶点
-    for(int i=0;i<poses.size();i++)
-    {
-        VertexSophus *vc = new VertexSophus();
-        vc->setId(i);
-        //设置初始值
-        vc->setEstimate(poses[i]);
-        optimizer.addVertex(vc);
-        vertex_cameras.push_back(vc);
+    int index = 0;
+    vector<VertexSophus *> vertex_sophus;
+    vector<g2o::VertexSBAPointXYZ *> vertex_SBAPointXYZ;
+	    for (auto T : poses) {
+        auto *pose = new VertexSophus();
+        pose->setId(index);
+        pose->setEstimate(T);
+        optimizer.addVertex(pose);
+        vertex_sophus.push_back(pose);
+        index++;
     }
-    for(int i=0;i<points.size();i++)
-    {
-        g2o::VertexSBAPointXYZ *vp = new g2o::VertexSBAPointXYZ();
-        vp->setId(i+poses.size());
-        vp->setEstimate(points[i]);
-        vp->setMarginalized(true);
-        optimizer.addVertex(vp);
-        vertex_points.push_back(vp);
+    for (auto p : points) {
+        auto *point = new g2o::VertexSBAPointXYZ;
+        point->setId(index);
+        point->setEstimate(p);
+        point->setMarginalized(true);
+        optimizer.addVertex(point);
+        vertex_SBAPointXYZ.push_back(point);
+        index++;
     }
-    //往opitimizer里面增加边
-    for (int i = 0; i < vertex_points.size(); i++) {
-        for (int c = 0; c < vertex_cameras.size(); c++) {
-            EdgeDirectProjection *edge = new EdgeDirectProjection(color[i],images[c]);
-            edge->setVertex(0, vertex_cameras[c]);
-            edge->setVertex(1, vertex_points[i]);
-            //Vector16d measurement;
-            //for(int g = 0;g<16;g++)
-            //{
-            //    measurement[g] = color[i][g];
-            //}
-            //edge->setMeasurement(measurement);
-            edge->setInformation(Eigen::Matrix<double,16,16>::Identity());
-            //防outlier
+    for (int i = 0; i < (int)images.size(); i++) {
+        for (int j = 0; j < (int)points.size(); j++) {
+            auto *edge = new EdgeDirectProjection(color[j], images[i]);
+            edge->setVertex(0, vertex_sophus[i]);
+            edge->setVertex(1, vertex_SBAPointXYZ[j]);
             edge->setRobustKernel(new g2o::RobustKernelHuber());
+            edge->setInformation(Eigen::Matrix<double, 16, 16>::Identity());
             optimizer.addEdge(edge);
         }
     }
+
     // END YOUR CODE HERE
 
     // perform optimization
     optimizer.initializeOptimization(0);
     optimizer.optimize(200);
 
-
-    Draw(poses, points);
     // TODO fetch data from the optimizer
     // START YOUR CODE HERE
-    for (int i = 0; i < vertex_cameras.size(); i++) {
-        VertexSophus *vertexC = vertex_cameras[i];
-        auto estimate = vertexC->estimate();
-        poses[i] = estimate;
-    }
-    for (int i = 0; i < vertex_points.size(); ++i) {
-        auto vertex = vertex_points[i];
-        points[i] = vertex->estimate();
+    vector<Sophus::SE3, Eigen::aligned_allocator<Sophus::SE3>> poses_res;
+    for(int i = 0; i < (int)poses.size(); i++){
+        auto vertex = (VertexSophus *)optimizer.vertex(i);
+        Sophus::SE3 T = vertex->estimate();
+        poses_res.push_back(T);
     }
     // END YOUR CODE HERE
 
-    // plot the optimized points and poses
+    // plot the optimized points and posesSE3
     Draw(poses, points);
 
     // delete color data
