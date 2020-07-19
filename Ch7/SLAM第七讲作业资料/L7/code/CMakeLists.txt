@@ -13,15 +13,18 @@ Find_Package(Ceres REQUIRED)
 Find_Package(Sophus REQUIRED)
 Find_Package(CSparse REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package( Pangolin )
 
-SET(G2O_LIBS g2o_csparse_extension g2o_stuff g2o_core cxsparse)
+SET(G2O_LIBS g2o_csparse_extension g2o_stuff g2o_core cxsparse g2o_types_sba)
+
 
 include_directories(${PROJECT_SOURCE_DIR} ${EIGEN3_INCLUDE_DIR} ${CSPARSE_INCLUDE_DIR})
 include_directories( ${Sophus_INCLUDE_DIRS} )
-
+include_directories( ${Pangolin_INCLUDE_DIRS} )
+include_directories(${G2O_INCLUDE_DIRS})
 add_library(bal_common common.cpp)
 add_executable(bundle_adjustment_bal bundle_adjustment_bal.cpp)
 target_link_libraries(bundle_adjustment_bal ${G2O_LIBS} bal_common ${Sophus_LIBRARIES})
 
 add_executable(directBA directBA.cpp)
-target_link_libraries(directBA ${G2O_LIBS} ${Sophus_LIBRARIES} ${OpenCV_LIBRARIES})
+target_link_libraries(directBA ${G2O_LIBS} ${Sophus_LIBRARIES} ${OpenCV_LIBRARIES} ${Pangolin_LIBRARIES})
