@@ -21,7 +21,8 @@ using namespace std;
 
 #include <Eigen/Core>
 #include <sophus/se3.h>
-#include <opencv4/opencv2/opencv.hpp>
+//#include <opencv4/opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 #include <pangolin/pangolin.h>
 #include <boost/format.hpp>
@@ -189,7 +190,7 @@ int main(int argc, char **argv) {
     //DirectBlock::LinearSolverType *linearSolver = new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>();
     std::unique_ptr<DirectBlock::LinearSolverType> linearSolver (new g2o::LinearSolverDense<DirectBlock::PoseMatrixType>()); // 线性方程求解器
     //DirectBlock *solver_ptr = new DirectBlock(linearSolver);
-    std::unique_ptr<DirectBlock> solver_ptr( new DirectBlock(std::move(linearSolver)));     // 矩阵块求解器
+    std::unique_ptr<DirectBlock> solver_ptr( new DirectBlock(std::move(linearSolver()));     // 矩阵块求解器
     //g2o::OptimizationAlgorithmLevenberg *solver = new g2o::OptimizationAlgorithmLevenberg(solver_ptr); // L-M
     g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( std::move(solver_ptr) );
     g2o::SparseOptimizer optimizer;
